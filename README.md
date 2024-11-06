@@ -4,15 +4,15 @@
     <img src="https://i.imgur.com/xmdzXU4.png" />
   </a>
   <h3>
- @particle-network/connectkit on Lumia Demo 
+ @particle-network/connectkit on Story Demo 
   </h3>
 </div>
 
-# Particle Connect on Lumia
+# Particle Connect on Story
 
 **Particle Connect** enables a unified modal driving connection with social logins (through Particle Auth) and standard Web3 wallets, creating an equally accessible experience for Web3 natives and traditional consumers. Particle Connect is an all-in-one SDK capable of handling end-to-end onboarding and wallet connection.
 
-This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [Lumia chain](https://docs.lumia.org/). You can view your account information and send transfer transactions to any address you input in the UI.
+This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [Story chain](https://www.story.foundation/). You can view your account information and send transfer transactions to any address you input in the UI.
 
 Built using:
 
@@ -31,7 +31,7 @@ Built using:
 
 ### Clone this repository
 ```
-git clone https://github.com/Particle-Network/connectkit-lumia-demo
+git clone https://github.com/Particle-Network/connectkit-story-demo
 ```
 
 ### Move into the app directory
@@ -57,6 +57,7 @@ This project requires several keys from Particle Network to be defined in `.env`
 - `NEXT_PUBLIC_PROJECT_ID`, the ID of the corresponding application in your [Particle Network dashboard](https://dashboard.particle.network/#/applications).
 - `NEXT_PUBLIC_CLIENT_KEY`, the ID of the corresponding project in your [Particle Network dashboard](https://dashboard.particle.network/#/applications).
 - `NEXT_PUBLIC_APP_ID`, the client key of the corresponding project in your [Particle Network dashboard](https://dashboard.particle.network/#/applications).
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID='WALLETCONNECT_PROJECT_ID`, retrieved from https://cloud.walletconnect.com. 
 
 ### Start the project
 ```sh
@@ -69,11 +70,11 @@ Or
 yarn dev
 ```
 
-## What is Lumia
+## What is Story
 
-Lumia is a hyper-liquid, capital-efficient zkEVM leveraging advanced technologies like PolygonCDK, AvailDA, and a custom Data Availability Committee (DAC) for redundancy. 
+Story Network is a blockchain platform designed specifically to simplify and automate intellectual property management, licensing, and monetization (IP). 
 
-Built through a collaboration between GatewayFM and Lumia’s tech team, Lumia integrates features such as its liquidity network (Lumia Stream), decentralized sequencers and zkProvers, fast finality, and robust validity proofs.
+Built as a layer one blockchain, Story Network integrates Ethereum Virtual Machine (EVM) compatibility with Cosmos SDK to create a system capable of handling complex IP data structures efficiently and cheaply.
 
 ## Build with Particle Connect (from scratch)
 
@@ -105,45 +106,63 @@ To get started with Particle Connect in your application, follow these steps:
    - Additional appearance customizations.
 
    ```tsx
-   'use client';
+  "use client";
 
-    import React from 'react';
-    import { ConnectKitProvider, createConfig } from '@particle-network/connectkit';
-    import { authWalletConnectors } from '@particle-network/connectkit/auth';
-    import { defineChain } from '@particle-network/connectkit/chains';
+  import React from "react";
+  import { ConnectKitProvider, createConfig } from "@particle-network/connectkit";
+  import { authWalletConnectors } from "@particle-network/connectkit/auth";
+  import { evmWalletConnectors } from "@particle-network/connectkit/evm";
+  import { defineChain } from "@particle-network/connectkit/chains";
+  import { wallet, EntryPosition } from "@particle-network/connectkit/wallet";
 
-    // Define the Lumia testnet
-    const LumiaTestnet = defineChain({
-    id: 1952959480,
-    name: "Lumia Testnet",
+  // Define the Story testnet
+  const storyTestnet = defineChain({
+    id: 1513,
+    name: "Story Testnet",
     nativeCurrency: {
-        decimals: 18,
-        name: "LUMIA",
-        symbol: "LUMIA",
+      decimals: 18,
+      name: "IP",
+      symbol: "IP",
     },
     rpcUrls: {
-        default: {
-        http: ["https://testnet-rpc.lumia.org"],
-        },
+      default: {
+        http: ["https://testnet.storyrpc.io/"],
+      },
     },
     blockExplorers: {
-        default: { name: "Explorer", url: "https://testnet-explorer.lumia.org/" },
+      default: { name: "Explorer", url: "https://iliad.explorer.story.foundation/" },
     },
     testnet: true,
-    });
+  });
 
-    const config = createConfig({
+  const config = createConfig({
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
     clientKey: process.env.NEXT_PUBLIC_CLIENT_KEY!,
     appId: process.env.NEXT_PUBLIC_APP_ID!,
-    walletConnectors: [authWalletConnectors({})],
+    walletConnectors: [
+      authWalletConnectors({
+        authTypes: ["email", "google", "apple", "twitter", "github"], // Optional, restricts the types of social logins supported
+      }),
+      // Default Web3 logins
+      evmWalletConnectors({
+        walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID, // optional, retrieved from https://cloud.walletconnect.com
+      }),
+    ],
 
-    chains: [LumiaTestnet],
-    });
+    plugins: [
+      wallet({
+        entryPosition: EntryPosition.BR, // Positions the modal button at the bottom right on login
+        visible: true, // Determines if the wallet modal is displayed
+      }),
+    ],
 
-    export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
+    chains: [storyTestnet],
+  });
+
+  export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
     return <ConnectKitProvider config={config}>{children}</ConnectKitProvider>;
-    };
+  };
+
    ```
 
 3. **Wrap Your App**:
@@ -160,7 +179,7 @@ To get started with Particle Connect in your application, follow these steps:
 
    export const metadata: Metadata = {
      title: "Particle Connect",
-     description: "Demo showcasing a quickstart for Particle Connect 2.0 on Lumia",
+     description: "Demo showcasing a quickstart for Particle Connect 2.0 on Story",
    };
 
    export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

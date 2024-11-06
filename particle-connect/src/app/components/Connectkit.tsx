@@ -3,24 +3,29 @@
 import React from "react";
 import { ConnectKitProvider, createConfig } from "@particle-network/connectkit";
 import { authWalletConnectors } from "@particle-network/connectkit/auth";
+import { evmWalletConnectors } from "@particle-network/connectkit/evm";
 import { defineChain } from "@particle-network/connectkit/chains";
+import { wallet, EntryPosition } from "@particle-network/connectkit/wallet";
 
 // Define the Lumia testnet
-const LumiaTestnet = defineChain({
-  id: 1952959480,
-  name: "Lumia Testnet",
+const storyTestnet = defineChain({
+  id: 1513,
+  name: "Story Testnet",
   nativeCurrency: {
     decimals: 18,
-    name: "LUMIA",
-    symbol: "LUMIA",
+    name: "IP",
+    symbol: "IP",
   },
   rpcUrls: {
     default: {
-      http: ["https://testnet-rpc.lumia.org"],
+      http: ["https://testnet.storyrpc.io/"],
     },
   },
   blockExplorers: {
-    default: { name: "Explorer", url: "https://testnet-explorer.lumia.org/" },
+    default: {
+      name: "Explorer",
+      url: "https://iliad.explorer.story.foundation/",
+    },
   },
   testnet: true,
 });
@@ -33,9 +38,20 @@ const config = createConfig({
     authWalletConnectors({
       authTypes: ["email", "google", "apple", "twitter", "github"], // Optional, restricts the types of social logins supported
     }),
+    // Default Web3 logins
+    evmWalletConnectors({
+      walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID, // optional, retrieved from https://cloud.walletconnect.com
+    }),
   ],
 
-  chains: [LumiaTestnet],
+  plugins: [
+    wallet({
+      entryPosition: EntryPosition.BR, // Positions the modal button at the bottom right on login
+      visible: true, // Determines if the wallet modal is displayed
+    }),
+  ],
+
+  chains: [storyTestnet],
 });
 
 export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
