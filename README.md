@@ -4,15 +4,15 @@
     <img src="https://i.imgur.com/xmdzXU4.png" />
   </a>
   <h3>
- @particle-network/connectkit on Story Demo 
+ @particle-network/connectkit on zkLink Demo 
   </h3>
 </div>
 
-# Particle Connect on Story
+# Particle Connect on zkLink
 
 **Particle Connect** enables a unified modal driving connection with social logins (through Particle Auth) and standard Web3 wallets, creating an equally accessible experience for Web3 natives and traditional consumers. Particle Connect is an all-in-one SDK capable of handling end-to-end onboarding and wallet connection.
 
-This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [Story chain](https://www.story.foundation/). You can view your account information and send transfer transactions to any address you input in the UI.
+This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [zkLink chain](https://www.zkLink.foundation/). You can view your account information and send transfer transactions to any address you input in the UI.
 
 Built using:
 
@@ -31,7 +31,7 @@ Built using:
 
 ### Clone this repository
 ```
-git clone https://github.com/Particle-Network/connectkit-story-demo
+git clone https://github.com/Particle-Network/connectkit-zklink-demo
 ```
 
 ### Move into the app directory
@@ -70,11 +70,9 @@ Or
 yarn dev
 ```
 
-## What is Story
+## What is zkLink
 
-Story Network is a blockchain platform designed specifically to simplify and automate intellectual property management, licensing, and monetization (IP). 
-
-Built as a layer one blockchain, Story Network integrates Ethereum Virtual Machine (EVM) compatibility with Cosmos SDK to create a system capable of handling complex IP data structures efficiently and cheaply.
+zkLink X is an infrastructure designed to simplify and optimize multi-chain interactions and app deployment in the blockchain ecosystem. Built with zero-knowledge-proof technology, it addresses key challenges like fragmented liquidity, complex cross-chain navigation, and high costs while enhancing security.
 
 ## Build with Particle Connect (from scratch)
 
@@ -112,28 +110,8 @@ To get started with Particle Connect in your application, follow these steps:
   import { ConnectKitProvider, createConfig } from "@particle-network/connectkit";
   import { authWalletConnectors } from "@particle-network/connectkit/auth";
   import { evmWalletConnectors } from "@particle-network/connectkit/evm";
-  import { defineChain } from "@particle-network/connectkit/chains";
+  import { zkLinkNova } from "@particle-network/connectkit/chains";
   import { wallet, EntryPosition } from "@particle-network/connectkit/wallet";
-
-  // Define the Story testnet
-  const storyTestnet = defineChain({
-    id: 1513,
-    name: "Story Testnet",
-    nativeCurrency: {
-      decimals: 18,
-      name: "IP",
-      symbol: "IP",
-    },
-    rpcUrls: {
-      default: {
-        http: ["https://testnet.storyrpc.io/"],
-      },
-    },
-    blockExplorers: {
-      default: { name: "Explorer", url: "https://iliad.explorer.story.foundation/" },
-    },
-    testnet: true,
-  });
 
   const config = createConfig({
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
@@ -156,7 +134,7 @@ To get started with Particle Connect in your application, follow these steps:
       }),
     ],
 
-    chains: [storyTestnet],
+    chains: [zkLinkNova],
   });
 
   export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
@@ -179,7 +157,7 @@ To get started with Particle Connect in your application, follow these steps:
 
    export const metadata: Metadata = {
      title: "Particle Connect",
-     description: "Demo showcasing a quickstart for Particle Connect 2.0 on Story",
+     description: "Demo showcasing a quickstart for Particle Connect 2.0 on zkLink",
    };
 
    export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

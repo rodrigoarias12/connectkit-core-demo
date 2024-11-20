@@ -4,31 +4,8 @@ import React from "react";
 import { ConnectKitProvider, createConfig } from "@particle-network/connectkit";
 import { authWalletConnectors } from "@particle-network/connectkit/auth";
 import { evmWalletConnectors } from "@particle-network/connectkit/evm";
-import { defineChain } from "@particle-network/connectkit/chains";
+import { zkLinkNova } from "@particle-network/connectkit/chains";
 import { wallet, EntryPosition } from "@particle-network/connectkit/wallet";
-
-// Define the Lumia testnet
-const storyTestnet = defineChain({
-  id: 1513,
-  name: "Story Testnet",
-  nativeCurrency: {
-    decimals: 18,
-    name: "IP",
-    symbol: "IP",
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://testnet.storyrpc.io/"],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Explorer",
-      url: "https://iliad.explorer.story.foundation/",
-    },
-  },
-  testnet: true,
-});
 
 const config = createConfig({
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
@@ -51,7 +28,7 @@ const config = createConfig({
     }),
   ],
 
-  chains: [storyTestnet],
+  chains: [zkLinkNova],
 });
 
 export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
