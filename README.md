@@ -12,7 +12,7 @@
 
 **Particle Connect** enables a unified modal driving connection with social logins (through Particle Auth) and standard Web3 wallets, creating an equally accessible experience for Web3 natives and traditional consumers. Particle Connect is an all-in-one SDK capable of handling end-to-end onboarding and wallet connection.
 
-This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [zkLink chain](https://www.zkLink.foundation/). You can view your account information and send transfer transactions to any address you input in the UI.
+This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [zkLink chain](https://docs.zk.link/). You can view your account information and send transfer transactions to any address you input in the UI.
 
 Built using:
 
