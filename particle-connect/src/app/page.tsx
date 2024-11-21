@@ -138,7 +138,7 @@ export default function Home() {
   const executeTxEthers = async () => {
     const tx = {
       to: recipientAddress,
-      value: parseEther("0.01"), // Set value to 0.01 Ether
+      value: parseEther("0.00001"), // Set value to 0.01 Ether
       data: "0x", // No data, as there is no contract interaction
     };
 
@@ -172,7 +172,7 @@ export default function Home() {
     try {
       const tx = {
         to: recipientAddress,
-        value: parseEther("0.01"), // Set value to 0.01 Ether
+        value: parseEther("0.00001"), // Set value to 0.01 Ether
         data: "0x", // No data, as there is no contract interaction
         chainId: primaryWallet.chainId, // Current chainId
         account: primaryWallet.accounts[0], // Primary account
@@ -308,7 +308,7 @@ export default function Home() {
                     Send a transaction
                   </h2>
                   <h2 className="text-lg">
-                    Send 0.01 {chain?.nativeCurrency.symbol}
+                    Send 0.00001 {chain?.nativeCurrency.symbol}
                   </h2>
                   <input
                     type="text"
@@ -322,14 +322,16 @@ export default function Home() {
                     onClick={executeTxNative}
                     disabled={!recipientAddress || isSending}
                   >
-                    {isSending ? "Sending..." : `Send 0.01 Particle provider`}
+                    {isSending
+                      ? "Sending..."
+                      : `Send 0.00001 Particle provider`}
                   </button>
                   <button
                     className="mt-4 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
                     onClick={executeTxEthers}
                     disabled={!recipientAddress || isSending}
                   >
-                    {isSending ? "Sending..." : `Send 0.01 with ethers`}
+                    {isSending ? "Sending..." : `Send 0.00001 with ethers`}
                   </button>
                   {/* Display transaction notification with the hash */}
                   {transactionHash && (

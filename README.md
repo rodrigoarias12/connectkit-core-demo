@@ -4,15 +4,15 @@
     <img src="https://i.imgur.com/xmdzXU4.png" />
   </a>
   <h3>
- @particle-network/connectkit on zkLink Demo 
+ @particle-network/connectkit on SKALE Demo 
   </h3>
 </div>
 
-# Particle Connect on zkLink
+# Particle Connect on SKALE
 
 **Particle Connect** enables a unified modal driving connection with social logins (through Particle Auth) and standard Web3 wallets, creating an equally accessible experience for Web3 natives and traditional consumers. Particle Connect is an all-in-one SDK capable of handling end-to-end onboarding and wallet connection.
 
-This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [zkLink chain](https://docs.zk.link/). You can view your account information and send transfer transactions to any address you input in the UI.
+This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [SKALE chain](https://skale.space/). You can view your account information and send transfer transactions to any address you input in the UI.
 
 Built using:
 
@@ -31,7 +31,7 @@ Built using:
 
 ### Clone this repository
 ```
-git clone https://github.com/Particle-Network/connectkit-zklink-demo
+git clone https://github.com/Particle-Network/connectkit-skale-demo
 ```
 
 ### Move into the app directory
@@ -70,9 +70,9 @@ Or
 yarn dev
 ```
 
-## What is zkLink
+## What is SKALE
 
-zkLink X is an infrastructure designed to simplify and optimize multi-chain interactions and app deployment in the blockchain ecosystem. Built with zero-knowledge-proof technology, it addresses key challenges like fragmented liquidity, complex cross-chain navigation, and high costs while enhancing security.
+The SKALE Network is an open-source, Ethereum-native multichain network designed to address scalability challenges for Ethereum-based dApps. It focuses on delivering high throughput, rapid finality, and gas-free transactions using its native gas token, sFUEL.
 
 ## Build with Particle Connect (from scratch)
 
@@ -110,7 +110,7 @@ To get started with Particle Connect in your application, follow these steps:
   import { ConnectKitProvider, createConfig } from "@particle-network/connectkit";
   import { authWalletConnectors } from "@particle-network/connectkit/auth";
   import { evmWalletConnectors } from "@particle-network/connectkit/evm";
-  import { zkLinkNova } from "@particle-network/connectkit/chains";
+  import { skaleNebula } from "@particle-network/connectkit/chains";
   import { wallet, EntryPosition } from "@particle-network/connectkit/wallet";
 
   const config = createConfig({
@@ -134,7 +134,7 @@ To get started with Particle Connect in your application, follow these steps:
       }),
     ],
 
-    chains: [zkLinkNova],
+    chains: [skaleNebula],
   });
 
   export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
@@ -157,7 +157,7 @@ To get started with Particle Connect in your application, follow these steps:
 
    export const metadata: Metadata = {
      title: "Particle Connect",
-     description: "Demo showcasing a quickstart for Particle Connect 2.0 on zkLink",
+     description: "Demo showcasing a quickstart for Particle Connect 2.0 on SKALE",
    };
 
    export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
