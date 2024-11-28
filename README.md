@@ -4,15 +4,15 @@
     <img src="https://i.imgur.com/xmdzXU4.png" />
   </a>
   <h3>
- @particle-network/connectkit on SKALE Demo 
+ @particle-network/connectkit on Core DAO Demo 
   </h3>
 </div>
 
-# Particle Connect on SKALE
+# Particle Connect on Core DAO
 
 **Particle Connect** enables a unified modal driving connection with social logins (through Particle Auth) and standard Web3 wallets, creating an equally accessible experience for Web3 natives and traditional consumers. Particle Connect is an all-in-one SDK capable of handling end-to-end onboarding and wallet connection.
 
-This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [SKALE chain](https://skale.space/). You can view your account information and send transfer transactions to any address you input in the UI.
+This app enables you to log in using social logins or Web3 methods via Particle Connect and interact with the [Core DAO chain](https://coredao.org/). You can view your account information and send transfer transactions to any address you input in the UI.
 
 Built using:
 
@@ -31,7 +31,7 @@ Built using:
 
 ### Clone this repository
 ```
-git clone https://github.com/Particle-Network/connectkit-skale-demo
+git clone https://github.com/Particle-Network/connectkit-core-demo
 ```
 
 ### Move into the app directory
@@ -70,9 +70,9 @@ Or
 yarn dev
 ```
 
-## What is SKALE
+## What is Core DAO
 
-The SKALE Network is an open-source, Ethereum-native multichain network designed to address scalability challenges for Ethereum-based dApps. It focuses on delivering high throughput, rapid finality, and gas-free transactions using its native gas token, sFUEL.
+Core is the first Bitcoin-aligned, EVM-compatible Layer-1 blockchain, built to complement Bitcoin with hyper-scalable smart contract capabilities. By integrating over 75% of Bitcoin's mining hash power and staking more than 8,200 BTC, Core introduces a secure and decentralized foundation for the next generation of DeFi innovation.
 
 ## Build with Particle Connect (from scratch)
 
@@ -104,13 +104,13 @@ To get started with Particle Connect in your application, follow these steps:
    - Additional appearance customizations.
 
    ```tsx
-  "use client";
+    "use client";
 
   import React from "react";
   import { ConnectKitProvider, createConfig } from "@particle-network/connectkit";
   import { authWalletConnectors } from "@particle-network/connectkit/auth";
   import { evmWalletConnectors } from "@particle-network/connectkit/evm";
-  import { skaleNebula } from "@particle-network/connectkit/chains";
+  import { coreDao } from "@particle-network/connectkit/chains";
   import { wallet, EntryPosition } from "@particle-network/connectkit/wallet";
 
   const config = createConfig({
@@ -134,13 +134,12 @@ To get started with Particle Connect in your application, follow these steps:
       }),
     ],
 
-    chains: [skaleNebula],
+    chains: [coreDao],
   });
 
   export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
     return <ConnectKitProvider config={config}>{children}</ConnectKitProvider>;
   };
-
    ```
 
 3. **Wrap Your App**:
@@ -157,7 +156,7 @@ To get started with Particle Connect in your application, follow these steps:
 
    export const metadata: Metadata = {
      title: "Particle Connect",
-     description: "Demo showcasing a quickstart for Particle Connect 2.0 on SKALE",
+     description: "Demo showcasing a quickstart for Particle Connect 2.0 on Core DAO",
    };
 
    export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -178,24 +177,29 @@ To get started with Particle Connect in your application, follow these steps:
    Example integration:
 
    ```tsx
-   import { ConnectButton, useAccount } from '@particle-network/connectkit';
+    "use client";
 
-   export const App = () => {
-       const { address, isConnected, chainId } = useAccount();
+  import { ConnectButton, useAccount } from "@particle-network/connectkit";
 
-       return (
-           <>
-           {isConnected ? (
-               <>
-               <h2>Address: {address}</h2>
-               <h2>Chain ID: {chainId}</h2>
-               </>
-           ) : (
-               <ConnectButton />
-           )}
-           </>
-       );
-   };
+  const App = () => {
+    const { address, isConnected, chainId } = useAccount();
+
+    // Standard ConnectButton utilization
+    return (
+      <div>
+        <ConnectButton />
+        {isConnected && (
+          <>
+            <h2>Address: {address}</h2>
+            <h2>Chain ID: {chainId}</h2>
+          </>
+        )}
+      </div>
+    );
+  };
+
+  export default App;
+
    ```
 
 ## Particle Connect features

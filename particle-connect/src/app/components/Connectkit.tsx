@@ -4,7 +4,7 @@ import React from "react";
 import { ConnectKitProvider, createConfig } from "@particle-network/connectkit";
 import { authWalletConnectors } from "@particle-network/connectkit/auth";
 import { evmWalletConnectors } from "@particle-network/connectkit/evm";
-import { skaleNebula } from "@particle-network/connectkit/chains";
+import { coreDao } from "@particle-network/connectkit/chains";
 import { wallet, EntryPosition } from "@particle-network/connectkit/wallet";
 
 const config = createConfig({
@@ -28,7 +28,7 @@ const config = createConfig({
     }),
   ],
 
-  chains: [skaleNebula],
+  chains: [coreDao],
 });
 
 export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
