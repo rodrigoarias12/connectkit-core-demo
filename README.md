@@ -179,26 +179,26 @@ To get started with Particle Connect in your application, follow these steps:
    ```tsx
     "use client";
 
-  import { ConnectButton, useAccount } from "@particle-network/connectkit";
+    import { ConnectButton, useAccount } from "@particle-network/connectkit";
 
-  const App = () => {
-    const { address, isConnected, chainId } = useAccount();
+    const App = () => {
+      const { address, isConnected, chainId } = useAccount();
 
-    // Standard ConnectButton utilization
-    return (
-      <div>
-        <ConnectButton />
-        {isConnected && (
-          <>
-            <h2>Address: {address}</h2>
-            <h2>Chain ID: {chainId}</h2>
-          </>
-        )}
-      </div>
-    );
-  };
+      // Standard ConnectButton utilization
+      return (
+        <div>
+          <ConnectButton />
+          {isConnected && (
+            <>
+              <h2>Address: {address}</h2>
+              <h2>Chain ID: {chainId}</h2>
+            </>
+          )}
+        </div>
+      );
+    };
 
-  export default App;
+    export default App;
 
    ```
 
