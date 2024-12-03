@@ -115,7 +115,7 @@ export default function Home() {
   const fetchBalance = async () => {
     try {
       if (!address) return;
-      const balanceResponse = await publicClient?.getBalance({ address });
+      const balanceResponse = await publicClient?.getBalance({ address: address as `0x${string}` });
       const balanceInEther = formatEther(balanceResponse!);
       console.log(balanceResponse);
       const fixedBalance = formatBalance(balanceInEther);
@@ -137,7 +137,7 @@ export default function Home() {
   // Send transaction using ethers.js with a custom EIP-1193 provider
   const executeTxEthers = async () => {
     const tx = {
-      to: recipientAddress,
+      to: recipientAddress as `0x${string}`,
       value: parseEther("0.00001"), // Set value to 0.01 Ether
       data: "0x", // No data, as there is no contract interaction
     };
@@ -171,20 +171,21 @@ export default function Home() {
   const executeTxNative = async () => {
     try {
       const tx = {
-        to: recipientAddress,
+        to: recipientAddress as `0x${string}`,
         value: parseEther("0.00001"), // Set value to 0.01 Ether
         data: "0x", // No data, as there is no contract interaction
         chainId: primaryWallet.chainId, // Current chainId
         account: primaryWallet.accounts[0], // Primary account
+        authorizationList: [], // Add an empty authorization list
       };
 
       setIsSending(true);
 
       const walletClient = primaryWallet.getWalletClient();
-      const transactionResponse = await walletClient.sendTransaction(tx);
+     // const transactionResponse = await walletClient.sendTransaction(tx);
 
-      setTransactionHash(transactionResponse);
-      console.log("Transaction sent:", transactionResponse);
+    //  setTransactionHash(transactionResponse);
+      //console.log("Transaction sent:", transactionResponse);
     } catch (error) {
       console.error("Failed to send transaction:", error);
     } finally {
