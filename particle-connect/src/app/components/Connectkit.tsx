@@ -22,11 +22,12 @@ const config = createConfig({
       entryPosition: EntryPosition.BR, // Positions the modal button at the bottom right on login
       visible: true, // Determines if the wallet modal is displayed
     }),
+    aa({
+      name: "BICONOMY",
+      version: "2.0.0",
+    }),
+  
   ],
-  aa({
-    name: "BICONOMY",
-    version: "2.0.0",
-  }),
 
   chains: [coreDao, polygonAmoy],
 });
