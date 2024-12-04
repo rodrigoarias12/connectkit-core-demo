@@ -1207,7 +1207,7 @@
     "@particle-network/aa" "^2.0.2"
     "@particle-network/plugin-core" "^1.0.1"
 
-"@particle-network/aa@^2.0.2":
+"@particle-network/aa@^2.0.0", "@particle-network/aa@^2.0.2":
   version "2.0.2"
   resolved "https://registry.npmjs.org/@particle-network/aa/-/aa-2.0.2.tgz"
   integrity sha512-8E7Y3NCU4m2eTtlyJSpLvIxgbbr8NHqhGrit2Sb0210UCjkXnWeCaxgV54cg/6nbjEclvEgUao32ycNnZu8Bzg==

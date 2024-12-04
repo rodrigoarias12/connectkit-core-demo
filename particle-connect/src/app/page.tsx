@@ -19,6 +19,7 @@ import {
   useParticleAuth,
   useWallets,
   useModal,
+  useSmartAccount,
 } from "@particle-network/connectkit";
 import { getChainIcon } from "@particle-network/connectkit/chains";
 
@@ -27,6 +28,8 @@ import { formatEther, parseEther } from "viem";
 
 // Import ethers provider for EIP-1193 compatibility
 import { ethers, type Eip1193Provider } from "ethers";
+// Eip1193 and AA Provider
+import { AAWrapProvider, SendTransactionMode } from "@particle-network/aa"; // Only needed with Eip1193 provider
 
 export default function Home() {
   // Initialize account-related states from Particle's useAccount hook
@@ -48,6 +51,7 @@ export default function Home() {
 
   // Retrieve the primary wallet from the Particle Wallets
   const [primaryWallet] = useWallets();
+  const smartAccount = useSmartAccount();
 
   // Define state variables
   const [account, setAccount] = useState(null); // Store account information
@@ -72,6 +76,16 @@ export default function Home() {
 
   // Integrate useModal to control the modal's visibility
   const { isOpen, setOpen } = useModal({});
+  // Init custom provider with gasless transaction mode
+  const customProvider = smartAccount
+    ? new ethers.BrowserProvider(
+        new AAWrapProvider(
+          smartAccount,
+          SendTransactionMode.Gasless
+        ) as Eip1193Provider,
+        "any"
+      )
+    : null;
 
   // Function to open the modal
   const handleOpenModal = () => {
@@ -169,29 +183,40 @@ export default function Home() {
 
   // Send transaction using the native Particle provider
   const executeTxNative = async () => {
+    console.log("Sending transaction...");
+    setIsSending(true);
     try {
       const tx = {
-        to: recipientAddress as `0x${string}`,
-        value: parseEther("0.00001"), // Set value to 0.01 Ether
-        data: "0x", // No data, as there is no contract interaction
-        chainId: primaryWallet.chainId, // Current chainId
-        account: primaryWallet.accounts[0], // Primary account
-        authorizationList: [], // Add an empty authorization list
+        to: recipientAddress,
+        value: parseEther("0.00001").toString(),
+        data: "0x",
       };
 
-      setIsSending(true);
+      // Fetch feequotes and use verifyingPaymasterGasless for a gasless transaction
+      const feeQuotesResult = await smartAccount?.getFeeQuotes(tx);
+      console.log("Fee quotes result:", feeQuotesResult);
+      const { userOp, userOpHash } =
+        feeQuotesResult?.verifyingPaymasterGasless || {};
 
-      const walletClient = primaryWallet.getWalletClient();
-     // const transactionResponse = await walletClient.sendTransaction(tx);
+      if (userOp && userOpHash) {
+        const txHash =
+          (await smartAccount?.sendUserOperation({
+            userOp,
+            userOpHash,
+          })) || null;
 
-    //  setTransactionHash(transactionResponse);
-      //console.log("Transaction sent:", transactionResponse);
+        setTransactionHash(txHash);
+        console.log("Transaction sent:", txHash);
+      } else {
+        console.error("User operation is undefined");
+      }
     } catch (error) {
       console.error("Failed to send transaction:", error);
     } finally {
       setIsSending(false);
     }
   };
+
 
   // Parameters for the on-ramp URL
   const fiatCoin = "USD";
