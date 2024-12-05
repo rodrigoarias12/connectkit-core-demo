@@ -6,7 +6,6 @@ import { authWalletConnectors } from "@particle-network/connectkit/auth";
 import { evmWalletConnectors } from "@particle-network/connectkit/evm";
 import { coreDao ,polygonAmoy } from "@particle-network/connectkit/chains";
 import { wallet, EntryPosition } from "@particle-network/connectkit/wallet";
-import { aa } from "@particle-network/connectkit/aa";
 const config = createConfig({
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
   clientKey: process.env.NEXT_PUBLIC_CLIENT_KEY!,
@@ -22,11 +21,6 @@ const config = createConfig({
       entryPosition: EntryPosition.BR, // Positions the modal button at the bottom right on login
       visible: true, // Determines if the wallet modal is displayed
     }),
-    aa({
-      name: "BICONOMY",
-      version: "2.0.0",
-    }),
-  
   ],
 
   chains: [coreDao, polygonAmoy],

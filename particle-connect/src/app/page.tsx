@@ -19,7 +19,6 @@ import {
   useParticleAuth,
   useWallets,
   useModal,
-  useSmartAccount,
 } from "@particle-network/connectkit";
 import { getChainIcon } from "@particle-network/connectkit/chains";
 
@@ -28,8 +27,6 @@ import { formatEther, parseEther } from "viem";
 
 // Import ethers provider for EIP-1193 compatibility
 import { ethers, type Eip1193Provider } from "ethers";
-// Eip1193 and AA Provider
-import { AAWrapProvider, SendTransactionMode } from "@particle-network/aa"; // Only needed with Eip1193 provider
 
 export default function Home() {
   // Initialize account-related states from Particle's useAccount hook
@@ -51,7 +48,6 @@ export default function Home() {
 
   // Retrieve the primary wallet from the Particle Wallets
   const [primaryWallet] = useWallets();
-  const smartAccount = useSmartAccount();
 
   // Define state variables
   const [account, setAccount] = useState(null); // Store account information
@@ -76,16 +72,6 @@ export default function Home() {
 
   // Integrate useModal to control the modal's visibility
   const { isOpen, setOpen } = useModal({});
-  // Init custom provider with gasless transaction mode
-  const customProvider = smartAccount
-    ? new ethers.BrowserProvider(
-        new AAWrapProvider(
-          smartAccount,
-          SendTransactionMode.Gasless
-        ) as Eip1193Provider,
-        "any"
-      )
-    : null;
 
   // Function to open the modal
   const handleOpenModal = () => {
@@ -183,40 +169,182 @@ export default function Home() {
 
   // Send transaction using the native Particle provider
   const executeTxNative = async () => {
-    console.log("Sending transaction...");
-    setIsSending(true);
+    const abi = 
+    [
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          }
+        ],
+        "name": "delegate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "voter",
+            "type": "address"
+          }
+        ],
+        "name": "giveRightToVote",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32[]",
+            "name": "proposalNames",
+            "type": "bytes32[]"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "proposal",
+            "type": "uint256"
+          }
+        ],
+        "name": "vote",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "chairperson",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "proposals",
+        "outputs": [
+          {
+            "internalType": "bytes32",
+            "name": "name",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "voteCount",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "voters",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "weight",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "voted",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "delegate",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "vote",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "winnerName",
+        "outputs": [
+          {
+            "internalType": "bytes32",
+            "name": "winnerName_",
+            "type": "bytes32"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "winningProposal",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "winningProposal_",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ]
+  const contractAddress = "0xbe6FDB4Bcb82Ed31914F04Fa7ac2833d5ab0228E";
+  const ballotInterface = new ethers.Interface(abi);
+  const datatx = ballotInterface.encodeFunctionData("vote", [1]);
     try {
       const tx = {
-        to: recipientAddress,
-        value: parseEther("0.00001").toString(),
-        data: "0x",
+        to: contractAddress,
+        // value: parseEther("0.00001"), // Set value to 0.01 Ether
+        data: datatx, // No data, as there is no contract interaction
+        chainId: primaryWallet.chainId, // Current chainId
+        account: primaryWallet.accounts[0], // Primary account
+        authorizationList: [], // Add an empty authorization list
       };
 
-      // Fetch feequotes and use verifyingPaymasterGasless for a gasless transaction
-      const feeQuotesResult = await smartAccount?.getFeeQuotes(tx);
-      console.log("Fee quotes result:", feeQuotesResult);
-      const { userOp, userOpHash } =
-        feeQuotesResult?.verifyingPaymasterGasless || {};
+      setIsSending(true);
 
-      if (userOp && userOpHash) {
-        const txHash =
-          (await smartAccount?.sendUserOperation({
-            userOp,
-            userOpHash,
-          })) || null;
+      const walletClient = primaryWallet.getWalletClient();
+      const transactionResponse = await walletClient.sendTransaction(tx as any);
 
-        setTransactionHash(txHash);
-        console.log("Transaction sent:", txHash);
-      } else {
-        console.error("User operation is undefined");
-      }
+      setTransactionHash(transactionResponse);
+      console.log("Transaction sent:", transactionResponse);
     } catch (error) {
       console.error("Failed to send transaction:", error);
     } finally {
       setIsSending(false);
     }
   };
-
 
   // Parameters for the on-ramp URL
   const fiatCoin = "USD";
